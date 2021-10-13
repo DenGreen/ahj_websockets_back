@@ -28,8 +28,22 @@ router.post('/massedge/add', async (ctx) => {
   ctx.response.body = response;
 });
 
-router.delete('/subscriptions/delete/:name', async (ctx) => {
-  const subscription = { ...ctx.params };
+router.get('/massedge/receive', async (ctx) => {
+
+  const response = subscriptions.receiveMesseges();
+
+  ctx.response.body = response;
+});
+
+router.get('/nicname/receive', async (ctx) => {
+
+  const response = subscriptions.receiveNicname();
+
+  ctx.response.body = response;
+});
+
+router.post('/subscriptions/delete', async (ctx) => {
+  const subscription = { ...ctx.request.body };
 
   if (!subscriptions.contains(subscription)) {
     ctx.response.status = 400;
