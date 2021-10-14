@@ -24,9 +24,11 @@ const subscriptions = {
     add(subscription) {
       console.log(this.db)
       this.db.push(subscription);
+      return this.dbMesseges;
     },
 
     addMesseges(subscription) {
+      console.log(subscription);
       const data = new Date().toLocaleString();
       subscription.data = data;
       this.dbMesseges.push(subscription);

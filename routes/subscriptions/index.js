@@ -20,13 +20,13 @@ router.post('/subscriptions/add', async (ctx) => {
   ctx.response.body = { status: 'ok' };
 });
 
-router.post('/massedge/add', async (ctx) => {
+/* router.post('/massedge/add', async (ctx) => {
 
   const subscription = { ...ctx.request.body };
   const response = subscriptions.addMesseges(subscription);
 
   ctx.response.body = response;
-});
+}); */
 
 router.get('/massedge/receive', async (ctx) => {
 

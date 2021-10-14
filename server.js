@@ -1,23 +1,26 @@
-const http = require('http');
-const Koa = require('koa');
-const router = require('./routes');
-const koaBody = require('koa-body');
-
+const http = require("http");
+const Koa = require("koa");
+const WS = require("ws");
+const router = require("./routes");
+const koaBody = require("koa-body");
 const app = new Koa();
+const subscriptions = require('./db/subscriptions');
 
-app.use(koaBody({
-  json: true,
-}));
+app.use(
+  koaBody({
+    json: true,
+  })
+);
 
 app.use(async (ctx, next) => {
-  const origin = ctx.request.get('Origin');
+  const origin = ctx.request.get("Origin");
   if (!origin) {
     return await next();
   }
 
-  const headers = { 'Access-Control-Allow-Origin': '*', };
+  const headers = { "Access-Control-Allow-Origin": "*" };
 
-  if (ctx.request.method !== 'OPTIONS') {
+  if (ctx.request.method !== "OPTIONS") {
     ctx.response.set({ ...headers });
     try {
       return await next();
@@ -27,14 +30,17 @@ app.use(async (ctx, next) => {
     }
   }
 
-  if (ctx.request.get('Access-Control-Request-Method')) {
+  if (ctx.request.get("Access-Control-Request-Method")) {
     ctx.response.set({
       ...headers,
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH',
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH",
     });
 
-    if (ctx.request.get('Access-Control-Request-Headers')) {
-      ctx.response.set('Access-Control-Allow-Headers', ctx.request.get('Access-Control-Request-Headers'));
+    if (ctx.request.get("Access-Control-Request-Headers")) {
+      ctx.response.set(
+        "Access-Control-Allow-Headers",
+        ctx.request.get("Access-Control-Request-Headers")
+      );
     }
 
     ctx.response.status = 204;
@@ -43,31 +49,32 @@ app.use(async (ctx, next) => {
 
 app.use(router());
 
-// const chat = [];
-
 const port = process.env.PORT || 7070;
 const server = http.createServer(app.callback());
 
-/* const wsServer = new WS.Server({
-  server
+const wsServer = new WS.Server({
+  server,
 });
 
-wsServer.on('connection', (ws) => {
-  const errCallback = (e) => { console.log(e); };
+wsServer.on("connection", (ws) => {
+  ws.on("message", (e) => {
+    const { method, data } = JSON.parse(e);
 
-  ws.on('message', (e) => {
-    console.log(e);
+    switch (method) {
+      case "massedgeAdd":
+        const response = subscriptions.addMesseges(data);
 
-    chat.push(e);
-
-    Array.from(wsServer.clients)
-      .filter(client => client.readyState === WS.OPEN)
-      .forEach(client => client.send(JSON.stringify({ message: e })));
-
+        Array.from(wsServer.clients)
+        .filter(client => client.readyState === WS.OPEN)
+        .forEach(client => client.send(JSON.stringify({ method: method, objData: [response] })));
+        return;
+      default:
+        ctx.response.body = `Unknown method '${method}' in request parameters`;
+        ctx.response.status = 400;
+        break;
+    }
   });
-
-  ws.send(JSON.stringify({ chat }), errCallback);
-}); */
+});
 
 server.listen(port, () => {
   console.log(`Server ready and listening on ${port}`);
