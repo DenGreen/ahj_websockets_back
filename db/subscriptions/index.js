@@ -1,6 +1,6 @@
 const subscriptions = {
     db: [],
-    dbMesseges: [],
+    dbMesseges: [{"name":"Денис","messege":"Тест","data":"16.10.2021"}],
     
     contains(subscription) {
       return this.db.some(item => item.name == subscription.name);
