@@ -4,7 +4,7 @@ const WS = require("ws");
 const router = require("./routes");
 const koaBody = require("koa-body");
 const app = new Koa();
-const subscriptions = require('./db/subscriptions');
+const subscriptions = require("./db/subscriptions");
 
 app.use(
   koaBody({
@@ -62,16 +62,29 @@ wsServer.on("connection", (ws) => {
 
     switch (method) {
       case "massedgeAdd":
-        const response = subscriptions.addMesseges(data);
-
         Array.from(wsServer.clients)
-        .filter(client => client.readyState === WS.OPEN)
-        .forEach(client => client.send(JSON.stringify({ method: method, objData: [response] })));
+          .filter((client) => client.readyState === WS.OPEN)
+          .forEach((client) =>
+            client.send(
+              JSON.stringify({
+                method: method,
+                objData: [subscriptions.addMesseges(data)],
+              })
+            )
+          );
         return;
-      default:
-        ctx.response.body = `Unknown method '${method}' in request parameters`;
-        ctx.response.status = 400;
-        break;
+      case "nicnameReceive":
+        Array.from(wsServer.clients)
+          .filter((client) => client.readyState === WS.OPEN)
+          .forEach((client) =>
+            client.send(
+              JSON.stringify({
+                method: method,
+                objData: subscriptions.receiveNicname(),
+              })
+            )
+          );
+        return;
     }
   });
 });

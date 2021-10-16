@@ -1,30 +1,14 @@
 const subscriptions = {
-    db: [
-      { name: "Денис" },
-      { name: "DanGreen" },
-      { name: "Hammer" },
-    ],
-    dbMesseges: [
-      { name: "Денис", data: "09.10.2021", messege: "Привет ребята!" },
-      { name: "Reiter", data: "09.10.2021", messege: "Супер" },
-      { name: "DanGreen", data: "09.10.2021", messege: "Как дела!" },
-      { name: "Hammer", data: "09.10.2021", messege: "хорошо!" },
-      { name: "Reiter", data: "09.10.2021", messege: "Супер" },
-      { name: "Денис", data: "09.10.2021", messege: "У вас как?" },
-      { name: "Reiter", data: "09.10.2021", messege: "Супер" },
-      { name: "Reiter", data: "09.10.2021", messege: "Супер" },
-      { name: "Reiter", data: "09.10.2021", messege: "Супер" },
-      { name: "Reiter", data: "09.10.2021", messege: "Супер" },
-    ],
+    db: [],
+    dbMesseges: [],
     
     contains(subscription) {
       return this.db.some(item => item.name == subscription.name);
     },
 
     add(subscription) {
-      console.log(this.db)
       this.db.push(subscription);
-      return this.dbMesseges;
+      console.log(this.db);
     },
 
     addMesseges(subscription) {
