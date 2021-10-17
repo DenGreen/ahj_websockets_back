@@ -91,16 +91,22 @@ wsServer.on("connection", (ws, req) => {
   });
 
   ws.on("close", (e) => {
-    Array.from(wsServer.clients)
-      .filter((client) => client.readyState === WS.OPEN)
-      .forEach((client) =>
+    const res = subscriptions.remove(ip);
+    const activeUsers = Array.from(wsServer.clients).filter((client) => client.readyState === WS.OPEN)
+    activeUsers.forEach((client) =>
         client.send(
           JSON.stringify({
             method: "delete",
-            objData: subscriptions.remove(ip),
+            objData: res,
           })
         )
       );
+
+      subscriptions.deleteMessege(); 
+    
+ /*    if(activeUsers.length === 0) {
+      
+    } */
   });
 });
 

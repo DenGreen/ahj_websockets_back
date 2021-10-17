@@ -14,7 +14,6 @@ const subscriptions = {
     },
 
     addMesseges(subscription) {
-      console.log(subscription);
       const data = new Date().toLocaleString();
       subscription.data = data;
       this.dbMesseges.push(subscription);
@@ -33,6 +32,10 @@ const subscriptions = {
       const index = this.db.findIndex(item => item.ip === ip);
       this.db.splice(index, 1);
       return this.db
+    },
+
+    deleteMessege() {
+      if(this.db.length === 0) this.dbMesseges = [];
     }
   };
   
