@@ -56,7 +56,9 @@ const wsServer = new WS.Server({
   server,
 });
 
-wsServer.on("connection", (ws) => {
+wsServer.on("connection", (ws, req) => {
+  const ip = req.socket.remoteAddress;
+
   ws.on("message", (e) => {
     const { method, data } = JSON.parse(e);
 
@@ -86,6 +88,19 @@ wsServer.on("connection", (ws) => {
           );
         return;
     }
+  });
+
+  ws.on("close", (e) => {
+    Array.from(wsServer.clients)
+      .filter((client) => client.readyState === WS.OPEN)
+      .forEach((client) =>
+        client.send(
+          JSON.stringify({
+            method: "delete",
+            objData: subscriptions.remove(ip),
+          })
+        )
+      );
   });
 });
 

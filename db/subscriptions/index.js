@@ -1,14 +1,16 @@
 const subscriptions = {
     db: [],
-    dbMesseges: [],
+    dbMesseges: [
+      {"name":"Денис","messege":"Тест","data":"16.10.2021"}
+    ],
     
     contains(subscription) {
       return this.db.some(item => item.name == subscription.name);
     },
 
-    add(subscription) {
+    add(subscription, ip) {
+      subscription.ip = ip;
       this.db.push(subscription);
-      console.log(this.db);
     },
 
     addMesseges(subscription) {
@@ -27,11 +29,10 @@ const subscriptions = {
       return this.db;
     },
 
-    remove(subscription) {
-      const index = this.db.findIndex(item => item.name === subscription.name);
-  
+    remove(ip) {
+      const index = this.db.findIndex(item => item.ip === ip);
       this.db.splice(index, 1);
-      console.log(this.db);
+      return this.db
     }
   };
   

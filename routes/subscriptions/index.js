@@ -7,6 +7,7 @@ const router = new Router();
 router.post('/subscriptions/add', async (ctx) => {
 
   const subscription = { ...ctx.request.body };
+  const ip = ctx.request.ip;
 
   if (subscriptions.contains(subscription)) {
     ctx.response.status = 400;
@@ -15,18 +16,10 @@ router.post('/subscriptions/add', async (ctx) => {
     return;
   }
 
-  subscriptions.add(subscription);
+  subscriptions.add(subscription, ip);
 
   ctx.response.body = { status: 'ok' };
 });
-
-/* router.post('/massedge/add', async (ctx) => {
-
-  const subscription = { ...ctx.request.body };
-  const response = subscriptions.addMesseges(subscription);
-
-  ctx.response.body = response;
-}); */
 
 router.get('/massedge/receive', async (ctx) => {
 
@@ -35,26 +28,5 @@ router.get('/massedge/receive', async (ctx) => {
   ctx.response.body = response;
 });
 
-router.get('/nicname/receive', async (ctx) => {
-
-  const response = subscriptions.receiveNicname();
-
-  ctx.response.body = response;
-});
-
-router.post('/subscriptions/delete', async (ctx) => {
-  const subscription = { ...ctx.request.body };
-
-  if (!subscriptions.contains(subscription)) {
-    ctx.response.status = 400;
-    ctx.response.body = { status: 'error' };
-
-    return;
-  }
-
-  subscriptions.remove(subscription);
-
-  ctx.response.body = { status: 'ok' };
-});
 
 module.exports = router;
