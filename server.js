@@ -92,7 +92,7 @@ wsServer.on("connection", (ws, req) => {
 
   ws.on("close", (e) => {
     const res = subscriptions.remove(ip);
-
+    console.log(ip);
     Array.from(wsServer.clients)
       .filter((client) => client.readyState === WS.OPEN)
       .forEach((client) =>
