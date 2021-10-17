@@ -7,7 +7,7 @@ const router = new Router();
 router.post('/subscriptions/add', async (ctx) => {
 
   const subscription = { ...ctx.request.body };
-  const ip = ctx.request.ip;
+  let ip = ctx.request.ip;
 
   if (subscriptions.contains(subscription)) {
     ctx.response.status = 400;

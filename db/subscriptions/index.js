@@ -11,6 +11,7 @@ const subscriptions = {
     add(subscription, ip) {
       subscription.ip = ip;
       this.db.push(subscription);
+      console.log(this.db);
     },
 
     addMesseges(subscription) {
@@ -30,7 +31,8 @@ const subscriptions = {
 
     remove(ip) {
       const index = this.db.findIndex(item => item.ip === ip);
-      this.db.splice(index, 1);
+      console.log(index);
+      if(index !== -1) this.db.splice(index, 1);
       return this.db
     },
 

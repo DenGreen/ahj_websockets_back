@@ -57,7 +57,7 @@ const wsServer = new WS.Server({
 });
 
 wsServer.on("connection", (ws, req) => {
-  const ip = req.socket.remoteAddress;
+  let ip = req.socket.remoteAddress;
 
   ws.on("message", (e) => {
     const { method, data } = JSON.parse(e);
