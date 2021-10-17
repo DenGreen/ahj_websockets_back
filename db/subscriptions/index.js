@@ -31,6 +31,7 @@ const subscriptions = {
     remove(ip) {
       const index = this.db.findIndex(item => item.ip === ip);
       if(index > -1) this.db.splice(index, 1);
+      return this.db
     },
 
     deleteMessege() {
