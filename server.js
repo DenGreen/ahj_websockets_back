@@ -57,7 +57,7 @@ const wsServer = new WS.Server({
 });
 
 wsServer.on("connection", (ws, req) => {
-  let ip = req.socket.remoteAddress;
+  const ip = req.socket.remoteAddress;
 
   ws.on("message", (e) => {
     const { method, data } = JSON.parse(e);
@@ -91,7 +91,7 @@ wsServer.on("connection", (ws, req) => {
   });
 
   ws.on("close", (e) => {
-    let res = subscriptions.remove(ip);
+    const res = subscriptions.remove(ip);
 
     Array.from(wsServer.clients)
       .filter((client) => client.readyState === WS.OPEN)
