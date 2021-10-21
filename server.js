@@ -75,6 +75,7 @@ wsServer.on("connection", (ws, req) => {
           );
         return;
       case "nicnameAdd":
+        console.log(portUser);
         console.log('open  ' + portUser.address);
         subscriptions.add(data, portUser.address);
         console.log(subscriptions.receiveNicname())
