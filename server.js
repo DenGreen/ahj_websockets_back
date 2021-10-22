@@ -5,7 +5,7 @@ const router = require("./routes");
 const koaBody = require("koa-body");
 const app = new Koa();
 const subscriptions = require("./db/subscriptions");
-
+let count = 0;
 app.use(
   koaBody({
     json: true,
@@ -56,8 +56,9 @@ const wsServer = new WS.Server({
   server,
 });
 
-wsServer.on("connection", (ws, req) => {
-  const ip = req.socket.remoteAddress;
+wsServer.on("connection", (ws) => {
+  const id = count++;
+
   ws.on("message", (e) => {
     const { method, data } = JSON.parse(e);
     switch (method) {
@@ -74,8 +75,8 @@ wsServer.on("connection", (ws, req) => {
           );
         return;
       case "nicnameAdd":
-        console.log('open  ' + ip);
-        subscriptions.add(data, ip);
+        console.log('open  ' + id);
+        subscriptions.add(data, id);
         console.log(subscriptions.receiveNicname())
         return;
       case "nicnameReceive":
@@ -94,9 +95,9 @@ wsServer.on("connection", (ws, req) => {
   });
 
   ws.on("close", (e) => {
-    const res = subscriptions.remove(ip);
+    const res = subscriptions.remove(id);
 
-    console.log('close  ' + ip);
+    console.log('close  ' + id);
     Array.from(wsServer.clients)
       .filter((client) => client.readyState === WS.OPEN)
       .forEach((client) =>

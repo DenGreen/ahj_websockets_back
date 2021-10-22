@@ -15,8 +15,6 @@ router.post('/subscriptions/add', async (ctx) => {
     return;
   }
 
-  subscriptions.add(subscription);
-
   ctx.response.body = { status: 'ok' };
 });
 
