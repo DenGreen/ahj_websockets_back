@@ -75,9 +75,7 @@ wsServer.on("connection", (ws) => {
           );
         return;
       case "nicnameAdd":
-        console.log('open  ' + id);
         subscriptions.add(data, id);
-        console.log(subscriptions.receiveNicname())
         return;
       case "nicnameReceive":
         Array.from(wsServer.clients)
@@ -97,7 +95,6 @@ wsServer.on("connection", (ws) => {
   ws.on("close", (e) => {
     const res = subscriptions.remove(id);
 
-    console.log('close  ' + id);
     Array.from(wsServer.clients)
       .filter((client) => client.readyState === WS.OPEN)
       .forEach((client) =>

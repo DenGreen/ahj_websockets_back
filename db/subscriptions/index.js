@@ -13,6 +13,7 @@ const subscriptions = {
       this.db.push(subscription);
     },
 
+    
     addMesseges(subscription) {
       const data = new Date().toLocaleString();
       subscription.data = data;
